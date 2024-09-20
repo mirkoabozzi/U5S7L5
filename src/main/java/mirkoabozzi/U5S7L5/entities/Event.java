@@ -28,15 +28,15 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
-    private User managerId;
+    private User manager;
 
-    public Event(String title, String description, LocalDate eventsDate, String place, int seatsNumber, User managerId) {
+    public Event(String title, String description, LocalDate eventsDate, String place, int seatsNumber, User manager) {
         this.title = title;
         this.description = description;
         this.eventsDate = eventsDate;
         this.place = place;
         this.seatsNumber = seatsNumber;
         this.availableSeats = seatsNumber;
-        this.managerId = managerId;
+        this.manager = manager;
     }
 }

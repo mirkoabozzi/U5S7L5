@@ -6,6 +6,7 @@ import mirkoabozzi.U5S7L5.entities.Event;
 import mirkoabozzi.U5S7L5.entities.User;
 import mirkoabozzi.U5S7L5.exceptions.BadRequestException;
 import mirkoabozzi.U5S7L5.exceptions.NotFoundException;
+import mirkoabozzi.U5S7L5.exceptions.UnauthorizedException;
 import mirkoabozzi.U5S7L5.repositories.EventsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,10 @@ public class EventsService {
     @Autowired
     private UsersService usersService;
 
-    public Event saveEvent(EventsDTO payload) {
+    public Event saveEvent(EventsDTO payload, UUID id) {
         if (eventsRepository.existsByEventsDateAndPlace(payload.eventsDate(), payload.place()))
             throw new BadRequestException("Event on place " + payload.place() + " on date " + payload.eventsDate() + " already on DB");
-        User found = usersService.findById(payload.managerId());
+        User found = usersService.findById(id);
         Event newEvent = new Event(payload.title(), payload.description(), payload.eventsDate(), payload.place(), payload.seatsNumber(), found);
         return this.eventsRepository.save(newEvent);
     }
@@ -31,17 +32,24 @@ public class EventsService {
         return eventsRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public Event updateEvent(UUID id, EventsUpdateDTO payload) {
-        Event found = this.findById(id);
-        found.setTitle(payload.title());
-        found.setDescription(payload.description());
-        found.setEventsDate(payload.eventsDate());
-        found.setPlace(payload.place());
-        found.setSeatsNumber(payload.seatsNumber());
-        return this.eventsRepository.save(found);
+    public Event updateEvent(UUID id, EventsUpdateDTO payload, UUID authenticatedUserId) {
+        User userFound = usersService.findById(authenticatedUserId);
+        Event eventFound = this.findById(id);
+        if (userFound.getId() != eventFound.getManager().getId())
+            throw new UnauthorizedException("You don't have permission to modify this event!");
+        eventFound.setTitle(payload.title());
+        eventFound.setDescription(payload.description());
+        eventFound.setEventsDate(payload.eventsDate());
+        eventFound.setPlace(payload.place());
+        eventFound.setSeatsNumber(payload.seatsNumber());
+        return this.eventsRepository.save(eventFound);
     }
 
-    public void deleteEvent(UUID id) {
+    public void deleteEvent(UUID id, UUID authenticatedUserId) {
+        User userFound = usersService.findById(authenticatedUserId);
+        Event eventFound = this.findById(id);
+        if (userFound.getId() != eventFound.getManager().getId())
+            throw new UnauthorizedException("You don't have permission to delete this event!");
         this.eventsRepository.delete(this.findById(id));
     }
 

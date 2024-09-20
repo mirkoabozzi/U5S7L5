@@ -3,7 +3,6 @@ package mirkoabozzi.U5S7L5.dto;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 public record EventsDTO(
         @NotNull(message = "Title is required. ")
@@ -15,9 +14,6 @@ public record EventsDTO(
         @NotNull(message = "Place is required. ")
         String place,
         @NotNull(message = "Seats number is required. ")
-        int seatsNumber,
-        @NotNull(message = "Manager Id is required. ")
-        UUID managerId
-
+        int seatsNumber
 ) {
 }
