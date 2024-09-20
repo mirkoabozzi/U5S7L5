@@ -21,10 +21,9 @@ public class UsersController {
     @Autowired
     private EventsService eventsService;
 
-    @GetMapping("/me")
+    @GetMapping("/reservations/me")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public List<Reservation> getMyEvents(@AuthenticationPrincipal User authenticatedUser
-    ) {
+    public List<Reservation> getMyEvents(@AuthenticationPrincipal User authenticatedUser) {
         return usersService.findAll(authenticatedUser);
     }
 }

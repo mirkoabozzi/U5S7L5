@@ -39,8 +39,6 @@ public class UsersService {
     }
 
     public List<Reservation> findAll(User authenticatedUser) {
-        List<Reservation> reservationsList = reservationsRepository.findByUserId(authenticatedUser.getId());
-        return reservationsList;
+        return this.reservationsRepository.findByUserId(authenticatedUser.getId());
     }
-
 }
