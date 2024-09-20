@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface ReservationsRepository extends JpaRepository<Reservation, UUID> {
+
+    boolean existsByEventIdAndUserId(UUID eventId, UUID userId);
 }

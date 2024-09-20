@@ -1,6 +1,7 @@
 package mirkoabozzi.U5S7L5.services;
 
 import mirkoabozzi.U5S7L5.dto.EventsDTO;
+import mirkoabozzi.U5S7L5.dto.EventsUpdateDTO;
 import mirkoabozzi.U5S7L5.entities.Event;
 import mirkoabozzi.U5S7L5.entities.User;
 import mirkoabozzi.U5S7L5.exceptions.BadRequestException;
@@ -30,7 +31,7 @@ public class EventsService {
         return eventsRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public Event updateEvent(UUID id, EventsDTO payload) {
+    public Event updateEvent(UUID id, EventsUpdateDTO payload) {
         Event found = this.findById(id);
         found.setTitle(payload.title());
         found.setDescription(payload.description());
@@ -42,5 +43,11 @@ public class EventsService {
 
     public void deleteEvent(UUID id) {
         this.eventsRepository.delete(this.findById(id));
+    }
+
+    public Event updateSeats(UUID id, int newSeats) {
+        Event found = this.findById(id);
+        found.setSeatsNumber(newSeats);
+        return this.eventsRepository.save(found);
     }
 }

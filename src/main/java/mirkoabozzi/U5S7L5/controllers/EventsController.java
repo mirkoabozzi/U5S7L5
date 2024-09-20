@@ -1,6 +1,7 @@
 package mirkoabozzi.U5S7L5.controllers;
 
 import mirkoabozzi.U5S7L5.dto.EventsDTO;
+import mirkoabozzi.U5S7L5.dto.EventsUpdateDTO;
 import mirkoabozzi.U5S7L5.entities.Event;
 import mirkoabozzi.U5S7L5.exceptions.BadRequestException;
 import mirkoabozzi.U5S7L5.services.EventsService;
@@ -34,7 +35,7 @@ public class EventsController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','EVENT_MANAGER')")
-    public Event updateEvent(@PathVariable UUID id, @RequestBody @Validated EventsDTO payload, BindingResult validation) {
+    public Event updateEvent(@PathVariable UUID id, @RequestBody @Validated EventsUpdateDTO payload, BindingResult validation) {
         if (validation.hasErrors()) {
             String msg = validation.getAllErrors().stream().map(error -> error.getDefaultMessage()).collect(Collectors.joining());
             throw new BadRequestException("Payload error: " + msg);

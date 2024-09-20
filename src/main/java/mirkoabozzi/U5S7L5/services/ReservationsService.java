@@ -1,0 +1,33 @@
+package mirkoabozzi.U5S7L5.services;
+
+import mirkoabozzi.U5S7L5.dto.ReservationsDTO;
+import mirkoabozzi.U5S7L5.entities.Event;
+import mirkoabozzi.U5S7L5.entities.Reservation;
+import mirkoabozzi.U5S7L5.entities.User;
+import mirkoabozzi.U5S7L5.exceptions.BadRequestException;
+import mirkoabozzi.U5S7L5.repositories.ReservationsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ReservationsService {
+    @Autowired
+    private ReservationsRepository reservationsRepository;
+    @Autowired
+    private EventsService eventsService;
+    @Autowired
+    private UsersService usersService;
+
+    public Reservation saveReservations(ReservationsDTO payload) {
+        if (this.reservationsRepository.existsByEventIdAndUserId(payload.eventId(), payload.userId()))
+            throw new BadRequestException("You already have a reservation for this event");
+        User userFound = this.usersService.findById(payload.userId());
+        Event eventFound = this.eventsService.findById(payload.eventId());
+        if (eventFound.getSeatsNumber() <= 0) throw new BadRequestException("This event is sold out!");
+        Reservation newReservation = new Reservation(eventFound, userFound);
+        int seatNumber = eventFound.getSeatsNumber();
+        eventsService.updateSeats(payload.eventId(), seatNumber - 1);
+        reservationsRepository.save(newReservation);
+        return newReservation;
+    }
+}

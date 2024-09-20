@@ -25,7 +25,7 @@ public class Event {
     private String place;
     private int seatsNumber;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "manager_id")
     private User managerId;
 
