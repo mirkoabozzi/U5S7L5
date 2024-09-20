@@ -21,5 +21,9 @@ public class UsersService {
         return this.usersRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
+    public User findByEmail(String email) {
+        return this.usersRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Email " + email + " not found on DB"));
+    }
+
 
 }
