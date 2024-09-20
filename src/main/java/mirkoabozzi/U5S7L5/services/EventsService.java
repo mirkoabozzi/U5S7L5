@@ -47,7 +47,7 @@ public class EventsService {
 
     public Event updateSeats(UUID id, int newSeats) {
         Event found = this.findById(id);
-        found.setSeatsNumber(newSeats);
+        found.setAvailableSeats(newSeats);
         return this.eventsRepository.save(found);
     }
 }

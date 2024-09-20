@@ -23,10 +23,10 @@ public class ReservationsService {
             throw new BadRequestException("You already have a reservation for this event");
         User userFound = this.usersService.findById(payload.userId());
         Event eventFound = this.eventsService.findById(payload.eventId());
-        if (eventFound.getSeatsNumber() <= 0) throw new BadRequestException("This event is sold out!");
+        if (eventFound.getAvailableSeats() <= 0) throw new BadRequestException("This event is sold out!");
         Reservation newReservation = new Reservation(eventFound, userFound);
-        int seatNumber = eventFound.getSeatsNumber();
-        eventsService.updateSeats(payload.eventId(), seatNumber - 1);
+        int availableSeat = eventFound.getAvailableSeats();
+        eventsService.updateSeats(payload.eventId(), availableSeat - 1);
         reservationsRepository.save(newReservation);
         return newReservation;
     }

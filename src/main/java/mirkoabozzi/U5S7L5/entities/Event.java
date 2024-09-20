@@ -24,6 +24,7 @@ public class Event {
     private LocalDate eventsDate;
     private String place;
     private int seatsNumber;
+    private int availableSeats;
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
@@ -35,6 +36,7 @@ public class Event {
         this.eventsDate = eventsDate;
         this.place = place;
         this.seatsNumber = seatsNumber;
+        this.availableSeats = seatsNumber;
         this.managerId = managerId;
     }
 }
