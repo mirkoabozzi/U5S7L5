@@ -1,6 +1,7 @@
 package mirkoabozzi.U5S7L5.entities;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class Reservation {
     @Id
     @GeneratedValue
+    @Setter(AccessLevel.NONE)
     private UUID id;
 
     @ManyToOne
@@ -24,4 +26,9 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Reservation(Event event, User user) {
+        this.event = event;
+        this.user = user;
+    }
 }

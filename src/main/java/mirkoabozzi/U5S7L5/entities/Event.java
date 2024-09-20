@@ -29,4 +29,12 @@ public class Event {
     @JoinColumn(name = "manager_id")
     private User managerId;
 
-   }
+    public Event(String title, String description, LocalDate eventsDate, String place, int seatsNumber, User managerId) {
+        this.title = title;
+        this.description = description;
+        this.eventsDate = eventsDate;
+        this.place = place;
+        this.seatsNumber = seatsNumber;
+        this.managerId = managerId;
+    }
+}
