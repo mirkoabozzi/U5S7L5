@@ -20,11 +20,11 @@ public class EventsService {
     @Autowired
     private UsersService usersService;
 
-    public Event saveEvent(EventsDTO payload, UUID id) {
+    public Event saveEvent(EventsDTO payload, UUID authenticatedUserId) {
         if (eventsRepository.existsByEventsDateAndPlace(payload.eventsDate(), payload.place()))
             throw new BadRequestException("Event on place " + payload.place() + " on date " + payload.eventsDate() + " already on DB");
-        User found = usersService.findById(id);
-        Event newEvent = new Event(payload.title(), payload.description(), payload.eventsDate(), payload.place(), payload.seatsNumber(), found);
+        User userFound = usersService.findById(authenticatedUserId);
+        Event newEvent = new Event(payload.title(), payload.description(), payload.eventsDate(), payload.place(), payload.seatsNumber(), userFound);
         return this.eventsRepository.save(newEvent);
     }
 
